@@ -1,2 +1,2 @@
 # the-type
- typing test website
+A typing test website
