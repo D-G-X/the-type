@@ -1,5 +1,4 @@
 import Type from "./pages/Type";
-import ThemeToggle from "./Test";
 
 export default function Home() {
   return (
