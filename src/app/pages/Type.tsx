@@ -1,7 +1,6 @@
 "use client";
 import { RotateCcw, ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { start } from "repl";
 
 export default function Type() {
   const text = [
@@ -79,7 +78,7 @@ export default function Type() {
   const [acc, setAcc] = useState<number>(-1);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [inputText, setInputText] = useState("");
-  const [inputBg, setInputBg] = useState<Boolean>(true);
+  const [inputBg, setInputBg] = useState<boolean>(true);
   const [currentIndex, setcurrentIndex] = useState(0);
   const [correctInputWordIndex, setCorrectInputWordIndex] = useState<number[]>(
     []
@@ -132,8 +131,8 @@ export default function Type() {
                 setInputBg(true);
                 const isCorrect = text[currentIndex] === trimmed;
 
-                let newCorrect = [...correctInputWordIndex];
-                let newIncorrect = [...incorrectInputWordIndex];
+                const newCorrect = [...correctInputWordIndex];
+                const newIncorrect = [...incorrectInputWordIndex];
 
                 if (isCorrect) {
                   newCorrect.push(currentIndex);
