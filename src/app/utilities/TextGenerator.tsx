@@ -1,9 +1,10 @@
+import jsonData from "./text.json";
+
 export default function generateParagraph(
   language: string,
   para_length: number
 ) {
-  const json = require("./text.json");
-  if (!(language in json)) {
+  if (!(language in jsonData)) {
     return {
       message: "Please select a given language",
       message_type: "error",
@@ -11,7 +12,7 @@ export default function generateParagraph(
       status: 401,
     };
   }
-  const text_pool = json[language];
+  const text_pool = jsonData[language as keyof typeof jsonData];
   const text_array = [];
   let capitalize = false;
   let random_number = randomIntFromInterval(0, text_pool.length - 1);
