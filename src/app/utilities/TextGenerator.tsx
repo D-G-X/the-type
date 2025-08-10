@@ -24,7 +24,7 @@ export default function generateParagraph(
         : text_pool[random_number]
     );
     capitalize = false;
-    let new_random_number = randomIntFromInterval(0, text_pool.length - 1);
+    const new_random_number = randomIntFromInterval(0, text_pool.length - 1);
     if (new_random_number == random_number) {
       if (random_number - 1 >= text_pool.length - 1 - random_number) {
         random_number = randomIntFromInterval(0, random_number - 1);
