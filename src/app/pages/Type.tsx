@@ -1,79 +1,12 @@
 "use client";
 import { RotateCcw, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import generateParagraph from "../utilities/TextGenerator";
 
 export default function Type() {
-  const text = [
-    "Lorem",
-    "ipsum",
-    "dolor",
-    "sit",
-    "amet",
-    "consectetur",
-    "adipiscing",
-    "elit",
-    "sed",
-    "do",
-    "eiusmod",
-    "tempor",
-    "incididunt",
-    "ut",
-    "labore",
-    "et",
-    "dolore",
-    "magna",
-    "aliqua",
-    "Ut",
-    "enim",
-    "ad",
-    "minim",
-    "veniam",
-    "quis",
-    "nostrud",
-    "exercitation",
-    "ullamco",
-    "laboris",
-    "nisi",
-    "ut",
-    "aliquip",
-    "ex",
-    "ea",
-    "commodo",
-    "consequat",
-    "Duis",
-    "aute",
-    "irure",
-    "dolor",
-    "in",
-    "reprehenderit",
-    "in",
-    "voluptate",
-    "velit",
-    "esse",
-    "cillum",
-    "dolore",
-    "eu",
-    "fugiat",
-    "nulla",
-    "pariatur",
-    "Excepteur",
-    "sint",
-    "occaecat",
-    "cupidatat",
-    "non",
-    "proident",
-    "sunt",
-    "in",
-    "culpa",
-    "qui",
-    "officia",
-    "deserunt",
-    "mollit",
-    "anim",
-    "id",
-    "est",
-    "laborum",
-  ];
+  const [text, setText] = useState<string[]>([]);
+  const [language, setLanguage] = useState("english");
+  const [paraLength, setParaLength] = useState(50);
   const [wpm, setWpm] = useState<number>(-1);
   const [acc, setAcc] = useState<number>(-1);
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -86,6 +19,34 @@ export default function Type() {
   const [incorrectInputWordIndex, setIncorrectInputWordIndex] = useState<
     number[]
   >([]);
+
+  useEffect(() => {
+    getParagraph();
+  }, []);
+
+  const retry = () => {
+    setCorrectInputWordIndex([]);
+    setIncorrectInputWordIndex([]);
+    setcurrentIndex(0);
+    setInputText("");
+    setStartTime(null);
+    setWpm(-1);
+    setAcc(-1);
+  };
+
+  const nextParagraph = () => {
+    retry();
+    getParagraph();
+  };
+
+  const getParagraph = () => {
+    const paragraph = generateParagraph(language, paraLength);
+    if (paragraph["status"] == 200) {
+      setText(paragraph["text_array"]);
+    } else {
+      setText([]);
+    }
+  };
   return (
     <div>
       <div className="flex justify-end  gap-5 text-xl mb-2 pr-5 font-bold">
@@ -100,10 +61,12 @@ export default function Type() {
                 key={word + "-" + index}
                 className={`inline ${
                   correctInputWordIndex.includes(index)
-                    ? "text-green-500"
+                    ? "text-[#34D399]"
                     : incorrectInputWordIndex.includes(index)
-                    ? "text-red-500"
-                    : ""
+                    ? "text-[#F87171]"
+                    : currentIndex == index
+                    ? "text-[#7972ff]"
+                    : "#fff"
                 }`}
               >
                 {word}
@@ -176,12 +139,14 @@ export default function Type() {
           <button
             className="p-2 bg-[#303030] rounded-md hover:bg-[#3a3a3a] transition"
             title="retry"
+            onClick={retry}
           >
             <RotateCcw className="text-white w-8 h-8" />
           </button>
           <button
             className="p-2 bg-[#303030] rounded-md hover:bg-[#3a3a3a] transition"
             title="next"
+            onClick={nextParagraph}
           >
             <ArrowRight className="text-white w-8 h-8" />
           </button>
