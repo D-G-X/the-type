@@ -49,11 +49,11 @@ export default function Type() {
   };
   return (
     <div>
-      <div className="flex justify-end  gap-5 text-xl mb-2 pr-5 font-bold">
+      <div className="flex justify-end  gap-5 text-2xl mb-2 pr-5 font-bold">
         <span>WPM: {wpm == -1 ? "XX" : Math.ceil(wpm)}</span>/
         <span>ACC: {acc == -1 ? "XX" : Math.ceil(acc)}</span>
       </div>
-      <div className="px-5 py-3 text-justify rounded-[15px] text-2xl dark:bg-[#4f4e4e40] max-w-[72rem]">
+      <div className="px-8 py-3 pt-8 text-justify rounded-[10px] text-2xl dark:bg-[#4f4e4e40] max-w-[72rem] font-semibold">
         <div>
           {text.map((word, index) => {
             return (
