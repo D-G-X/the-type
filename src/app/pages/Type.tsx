@@ -21,7 +21,20 @@ export default function Type() {
   >([]);
 
   useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && event.shiftKey) {
+        retry();
+      } else if (event.key === "Escape") {
+        nextParagraph();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
     getParagraph();
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   const retry = () => {
@@ -120,11 +133,6 @@ export default function Type() {
                 setInputText("");
               } else {
                 setInputText(value);
-                console.log(
-                  value,
-                  text[currentIndex].substring(0, value.length),
-                  value !== text[currentIndex].substring(0, value.length)
-                );
                 if (value !== text[currentIndex].substring(0, value.length)) {
                   setInputBg(false);
                 } else {
