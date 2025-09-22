@@ -9,6 +9,7 @@ import {
   Legend,
   ChartOptions,
 } from "chart.js";
+import { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -50,6 +51,21 @@ export default function UserChart(props: {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: "x",
+        },
+        pan: {
+          enabled: true,
+          mode: "x",
+        },
+      },
       legend: {
         position: "top",
       },
@@ -60,17 +76,23 @@ export default function UserChart(props: {
         callbacks: {
           title: function (context) {
             const dataIndex = context[0].dataIndex;
-            return `${props.userStatsData[dataIndex].word}`; // replaces "13" with the actual word
+            return `${props.userStatsData[dataIndex].word}`;
           },
         },
       },
     },
   };
 
+  useEffect(() => {
+    import("chartjs-plugin-zoom").then((mod) => {
+      ChartJS.register(mod.default);
+    });
+  }, []);
+
   return props.userStatsData.length == 0 ? (
     <div></div>
   ) : (
-    <div className="h-96 mb-10">
+    <div className="w-[80vw] h-[50vh] min-h-[300px] max-h-[700px] mb-10">
       <Line data={data} options={options} />
     </div>
   );
