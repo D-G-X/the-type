@@ -25,16 +25,6 @@ export default function Type() {
   >([]);
 
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && event.shiftKey) {
-        retry();
-      } else if (event.key === "Escape") {
-        nextParagraph();
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-
     let languageLocalStorage = window.localStorage.getItem("language");
     let paraLengthLocalStorage = window.localStorage.getItem("paraLength");
 
@@ -53,16 +43,29 @@ export default function Type() {
     }
 
     setText(Array(Number(paraLengthLocalStorage)).fill("undefined"));
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-    };
   }, []);
 
   useEffect(() => {
     getParagraph();
-    window.localStorage.setItem("paraLength", paraLength.toString());
-    window.localStorage.setItem("language", language);
+    if (paraLength) {
+      window.localStorage.setItem("paraLength", paraLength.toString());
+    }
+    if (language) {
+      window.localStorage.setItem("language", language);
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.shiftKey && event.key === "Escape") {
+        retry();
+      } else if (event.key === "Escape") {
+        nextParagraph();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, [language, paraLength]);
 
   const retry = () => {
@@ -86,7 +89,7 @@ export default function Type() {
     if (paragraph["status"] == 200) {
       setText(paragraph["text_array"]);
     } else {
-      setText(Array(paraLength).fill("undefined"));
+      setText(Array(paraLength).fill("0"));
     }
   };
 
@@ -287,9 +290,7 @@ export default function Type() {
                   }}
                 >
                   <option value="english">English</option>
-                  <option value="german" disabled>
-                    German
-                  </option>
+                  <option value="german">German</option>
                 </select>
               </div>
 
@@ -323,7 +324,6 @@ export default function Type() {
               <button
                 className="px-5 py-2 rounded-lg cursor-pointer text-[#7972ff] border-1"
                 onClick={() => {
-                  console.log("clicked");
                   setSettingsModalDisplay(false);
                 }}
               >
